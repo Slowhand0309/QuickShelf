@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var inputDir = ""
+    @State private var inputDir = ""
+    @State private var items: [URL] = []
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -17,15 +18,15 @@ struct ContentView: View {
                 TextField("Please select directory", text: $inputDir)
                     .disabled(true)
                 Button {
-                    // TODO
+                    openPanel()
                 } label: {
                     Image(systemName: "folder")
                 }
             }
             Text("Items")
             List {
-                ForEach(1...20, id: \.self) { index in
-                    Text("Folder\(index)")
+                ForEach(items, id: \.self) { item in
+                    Text("\(item.lastPathComponent)")
                 }
             }
             .frame(height: 300)
@@ -33,6 +34,29 @@ struct ContentView: View {
             .background(Color.black.opacity(0.3))
         }
         .padding(.all, 16)
+    }
+
+    private func openPanel() {
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = true
+        panel.canChooseFiles = false
+        panel.begin { result in
+            guard result == .OK, let url = panel.url else { return }
+            let bookmark = try? url.bookmarkData(options: .withSecurityScope,
+                                                includingResourceValuesForKeys: nil,
+                                                relativeTo: nil)
+            UserDefaults.standard.set(bookmark, forKey: "user_selected_dir")
+            self.items = load(path: url)
+            self.inputDir = url.relativePath
+        }
+    }
+
+    private func load(path: URL) -> [URL] {
+        let result = try? FileManager.default.contentsOfDirectory(
+            at: path,
+            includingPropertiesForKeys: [.isDirectoryKey, .fileSizeKey],
+            options: [.skipsHiddenFiles])
+        return result ?? []
     }
 }
 
