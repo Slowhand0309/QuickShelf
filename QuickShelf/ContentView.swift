@@ -27,6 +27,7 @@ struct ContentView: View {
             List {
                 ForEach(items, id: \.self) { item in
                     Text("\(item.lastPathComponent)")
+                        .draggable(item)
                 }
             }
             .frame(height: 300)
@@ -49,6 +50,7 @@ struct ContentView: View {
             self.items = load(path: url)
             self.inputDir = url.relativePath
         }
+        panel.orderFrontRegardless()
     }
 
     private func load(path: URL) -> [URL] {
