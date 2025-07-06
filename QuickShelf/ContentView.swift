@@ -8,14 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var inputDir = ""
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        VStack(alignment: .leading) {
+            Text("Directory")
+            HStack {
+                TextField("Please select directory", text: $inputDir)
+                    .disabled(true)
+                Button {
+                    // TODO
+                } label: {
+                    Image(systemName: "folder")
+                }
+            }
+            Text("Items")
+            List {
+                ForEach(1...20, id: \.self) { index in
+                    Text("Folder\(index)")
+                }
+            }
+            .frame(height: 300)
+            .scrollContentBackground(.hidden)
+            .background(Color.black.opacity(0.3))
         }
-        .padding()
+        .padding(.all, 16)
     }
 }
 
