@@ -19,7 +19,6 @@ struct QuickShelfApp: App {
             systemImage: "folder.fill" // TODO: アイコン検討
         ) {
             ContentView()
-                .frame(width: 300, height: 180)
         }
         .menuBarExtraStyle(.window)
         .menuBarExtraAccess(isPresented: $isPresented) { item in
