@@ -37,6 +37,19 @@ struct ContentView: View {
             .background(Color.black.opacity(0.3))
         }
         .padding(.all, 16)
+        .onAppear {
+            if let data = UserDefaults.standard.data(forKey: "user_selected_dir") {
+                var stale = false
+                if let url = try? URL(resolvingBookmarkData: data,
+                                            options: [.withSecurityScope],
+                                            bookmarkDataIsStale: &stale),
+                   url.startAccessingSecurityScopedResource() {
+                    self.items = load(path: url)
+                    self.inputDir = url.relativePath
+                    url.stopAccessingSecurityScopedResource()
+                }
+            }
+        }
     }
 
     private func openPanel() {
