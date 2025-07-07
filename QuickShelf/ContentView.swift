@@ -26,7 +26,8 @@ struct ContentView: View {
             Text("Items")
             List {
                 ForEach(items, id: \.self) { item in
-                    Text("\(item.url.lastPathComponent)")
+                    ShelfItemView(item: item)
+                        .alignmentGuide(.listRowSeparatorLeading) { _ in  0 }
                         .draggable(item.url)
                 }
             }
