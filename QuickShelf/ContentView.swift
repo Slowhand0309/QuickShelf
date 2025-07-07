@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var inputDir = ""
-    @State private var items: [URL] = []
+    @State private var items: [ShelfItem] = []
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -26,8 +26,10 @@ struct ContentView: View {
             Text("Items")
             List {
                 ForEach(items, id: \.self) { item in
-                    Text("\(item.lastPathComponent)")
-                        .draggable(item)
+                    ShelfItemView(item: item)
+                        .alignmentGuide(.listRowSeparatorLeading) { _ in  0 }
+                        .listRowSeparatorTint(Color.white.opacity(0.3))
+                        .draggable(item.url)
                 }
             }
             .frame(height: 300)
@@ -53,12 +55,16 @@ struct ContentView: View {
         panel.orderFrontRegardless()
     }
 
-    private func load(path: URL) -> [URL] {
+    private func load(path: URL) -> [ShelfItem] {
         let result = try? FileManager.default.contentsOfDirectory(
             at: path,
             includingPropertiesForKeys: [.isDirectoryKey, .fileSizeKey],
             options: [.skipsHiddenFiles])
-        return result ?? []
+        return result?.compactMap({ url -> ShelfItem? in
+            let values = try? url.resourceValues(forKeys: [.isDirectoryKey, .fileSizeKey])
+            guard let isDirectory = values?.isDirectory as? Bool else { return nil }
+            return ShelfItem(url: url, isDirectory: isDirectory)
+        }) ?? []
     }
 }
 
