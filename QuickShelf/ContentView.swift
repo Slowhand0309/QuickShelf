@@ -28,6 +28,7 @@ struct ContentView: View {
                 ForEach(items, id: \.self) { item in
                     ShelfItemView(item: item)
                         .alignmentGuide(.listRowSeparatorLeading) { _ in  0 }
+                        .listRowSeparatorTint(Color.white.opacity(0.3))
                         .draggable(item.url)
                 }
             }
