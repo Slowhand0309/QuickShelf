@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import HotKey
 import MenuBarExtraAccess
 
 @main
 struct QuickShelfApp: App {
     @State private var isPresented = false
     @State private var statusItem: NSStatusItem?
+
+    private let hotKey = HotKey(key: .s,
+                                modifiers: [.command, .option])
 
     var body: some Scene {
         MenuBarExtra(
@@ -24,6 +28,9 @@ struct QuickShelfApp: App {
         .menuBarExtraAccess(isPresented: $isPresented) { item in
             statusItem = item
             addRightClickMonitor()
+            hotKey.keyDownHandler = { [] in
+                item.button?.performClick(nil)
+            }
         }
     }
 
