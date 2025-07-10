@@ -18,11 +18,13 @@ struct QuickShelfApp: App {
                                 modifiers: [.command, .option])
 
     var body: some Scene {
-        MenuBarExtra(
-            "QuickShelf",
-            systemImage: "folder.fill" // TODO: アイコン検討
-        ) {
+        MenuBarExtra {
             ContentView()
+        } label: {
+            Image("Logo")
+                .renderingMode(.template)
+                .resizable()
+                .frame(width: 18, height: 18)
         }
         .menuBarExtraStyle(.window)
         .menuBarExtraAccess(isPresented: $isPresented) { item in
