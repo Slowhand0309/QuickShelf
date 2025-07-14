@@ -53,6 +53,9 @@ struct ContentView: View {
     }
 
     private func openPanel() {
+        // If the app is inactive, the sidebar cannot be selected, so I'll activate it.
+        NSApp.activate(ignoringOtherApps: true)
+
         let panel = NSOpenPanel()
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
