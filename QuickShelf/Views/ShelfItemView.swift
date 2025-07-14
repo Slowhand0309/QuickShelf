@@ -12,10 +12,18 @@ struct ShelfItemView: View {
 
     var body: some View {
         HStack {
-            if item.isDirectory {
-                Image(systemName: "folder")
+            if ProcessInfo.isPreview {
+                // Dummy image for preview
+                if item.isDirectory {
+                    Image(systemName: "folder")
+                } else {
+                    Image(systemName: "text.page")
+                }
             } else {
-                Image(systemName: "text.page")
+                Image(nsImage: NSWorkspace.shared.icon(forFile: item.url.path))
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20)
             }
             Text(item.url.lastPathComponent)
         }
