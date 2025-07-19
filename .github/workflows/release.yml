@@ -31,17 +31,15 @@ jobs:
       env:
         TEAM_ID: ${{ secrets.TEAM_ID }}
 
-    - name: Show identities (debug)
-      run: security find-identity -v -p codesigning
-
     - name: Codesign
       run: |
         xcrun codesign --force --deep \
           --timestamp \
           --options runtime \
-          --sign "Developer ID Application: $TEAM_ID" "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app"
+          --sign "$SIGN_ID" "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app"
       env:
         TEAM_ID: ${{ secrets.TEAM_ID }}
+        SIGN_ID: ${{ secrets.DEVID_COMMON_NAME }}
     # ZIP the .app
     - name: Zip app
       run: |
