@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-sign-notarize:
-    runs-on: macos-14 # Xcode 16 / notarytool 同梱
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v4
