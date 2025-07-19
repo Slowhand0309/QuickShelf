@@ -31,6 +31,14 @@ jobs:
       env:
         TEAM_ID: ${{ secrets.TEAM_ID }}
 
+    - name: Codesign
+      run: |
+        xcrun codesign --force --deep \
+          --timestamp \
+          --options runtime \
+          --sign "Developer ID Application: $TEAM_ID" "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app"
+      env:
+        TEAM_ID: ${{ secrets.TEAM_ID }}
     # ZIP the .app
     - name: Zip app
       run: |
