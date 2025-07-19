@@ -31,6 +31,9 @@ jobs:
       env:
         TEAM_ID: ${{ secrets.TEAM_ID }}
 
+    - name: Show identities (debug)
+      run: security find-identity -v -p codesigning
+
     - name: Codesign
       run: |
         xcrun codesign --force --deep \
