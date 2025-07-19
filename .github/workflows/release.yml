@@ -21,14 +21,13 @@ jobs:
     #  Xcode build (signed)
     - name: Build release
       run: |
-        xcodebuild -scheme QuickShelf \
-                   -configuration Release \
+        xcodebuild -project QuickShelf.xcodeproj \
+                   -scheme QuickShelf \
+                   -config Release \
                    -archivePath build/QuickShelf.xcarchive \
                    clean archive \
-                   CODE_SIGN_STYLE=Manual \
-                   DEVELOPMENT_TEAM="$TEAM_ID" \
-                   PROVISIONING_PROFILE_SPECIFIER="" \
-                   OTHER_CODE_SIGN_FLAGS="--options runtime"
+                   CODE_SIGN_IDENTITY="" \
+                   CODE_SIGNING_REQUIRED="NO"
       env:
         TEAM_ID: ${{ secrets.TEAM_ID }}
 
