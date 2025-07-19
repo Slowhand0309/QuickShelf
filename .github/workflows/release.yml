@@ -16,7 +16,7 @@ jobs:
     - uses: apple-actions/import-codesign-certs@v3
       with:
         p12-file-base64: ${{ secrets.DEV_ID_CERT_P12 }}
-        # p12-password:    ${{ secrets.DEV_ID_CERT_PASSWORD }}
+        p12-password:    ${{ secrets.DEV_ID_CERT_PASSWORD }}
 
     # 3) Xcode ビルド（署名付き）
     - name: Build release
