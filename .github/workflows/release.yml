@@ -1,0 +1,72 @@
+name: build-macos
+on:
+  push:
+    tags: ["v*"]
+    branches:
+      - check/ci
+
+jobs:
+  build-sign-notarize:
+    runs-on: macos-14 # Xcode 16 / notarytool 同梱
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # 2) 証明書を Keychain に取込
+    - uses: apple-actions/import-codesign-certs@v3
+      with:
+        p12-file-base64: ${{ secrets.DEV_ID_CERT_P12 }}
+        # p12-password:    ${{ secrets.DEV_ID_CERT_PASSWORD }}
+
+    # 3) Xcode ビルド（署名付き）
+    - name: Build release
+      run: |
+        xcodebuild -scheme QuickShelf \
+                   -configuration Release \
+                   -archivePath build/QuickShelf.xcarchive \
+                   clean archive \
+                   CODE_SIGN_STYLE=Manual \
+                   DEVELOPMENT_TEAM="$TEAM_ID" \
+                   PROVISIONING_PROFILE_SPECIFIER="" \
+                   OTHER_CODE_SIGN_FLAGS="--options runtime"
+      env:
+        TEAM_ID: ${{ secrets.TEAM_ID }}
+
+    # 4) .app を ZIP 化
+    - name: Zip app
+      run: |
+        ditto -c -k --keepParent "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app" QuickShelf.zip
+
+    # 5) notarytool で提出（Keychain プロファイルをその場で保存）
+    - name: Store notary credentials
+      run: |
+        xcrun notarytool store-credentials "notary-profile" \
+          --apple-id "$APPLE_ID" \
+          --team-id "$TEAM_ID" \
+          --password "$APPLE_PASS"
+      env:
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+        APPLE_PASS: ${{ secrets.APPLE_PASS }}
+        TEAM_ID: ${{ secrets.TEAM_ID }}
+
+    - name: Submit to notarization
+      run: |
+        xcrun notarytool submit QuickShelf.zip \
+          --keychain-profile "notary-profile" --wait
+
+    # 6) ステープル
+    - name: Staple ticket
+      run: xcrun stapler staple "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app"
+
+    # 7) Gatekeeper 検証 と 再ZIP 化
+    - name: Validate
+      run: |
+        spctl --assess --type execute --verbose=4 "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app"
+        xcrun stapler validate "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app"
+        ditto -c -k --keepParent "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app" QuickShelf.zip
+
+    # 8) 成果物アップロード
+    - uses: actions/upload-artifact@v4
+      with:
+        name: QuickShelf-macOS
+        path: QuickShelf.zip
