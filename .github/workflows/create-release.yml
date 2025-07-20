@@ -5,6 +5,9 @@ on:
     branches:
       - check/ci
 
+permissions:
+  contents: write
+
 jobs:
   build-sign-notarize:
     runs-on: macos-15
@@ -73,8 +76,17 @@ jobs:
         xcrun stapler validate "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app"
         ditto -c -k --keepParent "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app" QuickShelf.zip
 
-    # Upload Deliverables
-    - uses: actions/upload-artifact@v4
+    - name: Create Release and Upload Assets
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
-        name: QuickShelf-macOS
-        path: QuickShelf.zip
+        files: QuickShelf.zip
+        draft: true
+        generate_release_notes: true
+
+    # Upload Deliverables
+    # - uses: actions/upload-artifact@v4
+    #   with:
+    #     name: QuickShelf-macOS
+    #     path: QuickShelf.zip
