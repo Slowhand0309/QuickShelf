@@ -25,7 +25,7 @@ struct ContentView: View {
             }
             Text("Items")
             List {
-                ForEach(items, id: \.self) { item in
+                ForEach(items.standardSorted(), id: \.url) { item in
                     ShelfItemView(item: item)
                         .alignmentGuide(.listRowSeparatorLeading) { _ in  0 }
                         .listRowSeparatorTint(Color.white.opacity(0.3))
