@@ -30,9 +30,7 @@ jobs:
                    -archivePath build/QuickShelf.xcarchive \
                    clean archive \
                    ARCHS="arm64 x86_64" \
-                   ONLY_ACTIVE_ARCH=NO \
-                   CODE_SIGN_IDENTITY="" \
-                   CODE_SIGNING_REQUIRED="NO"
+                   ONLY_ACTIVE_ARCH=NO
       env:
         TEAM_ID: ${{ secrets.TEAM_ID }}
 
