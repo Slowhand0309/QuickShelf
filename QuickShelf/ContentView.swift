@@ -29,7 +29,7 @@ struct ContentView: View {
                     ShelfItemView(item: item)
                         .alignmentGuide(.listRowSeparatorLeading) { _ in  0 }
                         .listRowSeparatorTint(Color.white.opacity(0.3))
-                        .draggable(item.url)
+                        .draggable(item)
                 }
             }
             .frame(height: 300)
