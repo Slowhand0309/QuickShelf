@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ShelfItemView: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     let item: ShelfItem
 
     var body: some View {
@@ -26,6 +28,7 @@ struct ShelfItemView: View {
                     .frame(width: 20, height: 20)
             }
             Text(item.url.lastPathComponent)
+                .foregroundColor(colorScheme == .dark ? .primary : .white.opacity(0.7))
         }
         .padding(.all, 8)
     }
