@@ -27,7 +27,11 @@ final class ShelfItem: Hashable, Transferable {
     
     static var transferRepresentation: some TransferRepresentation {
         FileRepresentation(contentType: .item) { item in
-            SentTransferredFile(item.url)
+            let accessed = item.url.startAccessingSecurityScopedResource()
+            defer {
+                if accessed { item.url.stopAccessingSecurityScopedResource() }
+            }
+            return SentTransferredFile(item.url)
         } importing: { received in
             ShelfItem(url: received.file,
                       isDirectory: received.file.hasDirectoryPath)
