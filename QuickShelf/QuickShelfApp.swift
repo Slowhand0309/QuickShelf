@@ -49,8 +49,8 @@ struct QuickShelfApp: App {
 
     private func popupContextMenu(for item: NSStatusItem) {
         let menu = NSMenu()
-        menu.addItem(withTitle: "Preferences…", action: nil, keyEquivalent: ",")
-        menu.addItem(.separator())
+//        menu.addItem(withTitle: "Preferences…", action: nil, keyEquivalent: ",")
+//        menu.addItem(.separator())
         menu.addItem(withTitle: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q")
         item.menu = menu
         item.button?.performClick(nil)
