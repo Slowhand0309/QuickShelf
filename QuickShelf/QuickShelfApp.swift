@@ -15,7 +15,7 @@ struct QuickShelfApp: App {
     @State private var statusItem: NSStatusItem?
 
     private let hotKey = HotKey(key: .s,
-                                modifiers: [.command, .option])
+                                modifiers: [.command, .control])
 
     var body: some Scene {
         MenuBarExtra {
