@@ -39,6 +39,7 @@ jobs:
         xcrun codesign --force --deep \
           --timestamp \
           --options runtime \
+          --entitlements QuickShelf/QuickShelf.entitlements \
           --sign "$SIGN_ID" "build/QuickShelf.xcarchive/Products/Applications/QuickShelf.app"
       env:
         TEAM_ID: ${{ secrets.TEAM_ID }}
