@@ -40,7 +40,7 @@ struct QuickShelfApp: App {
             }
         }
 
-        Settings { Text("Settings") }
+        Settings { SettingsView() }
     }
 
     private func addRightClickMonitor() {
