@@ -6,8 +6,6 @@
 
 <img width="100%" alt="QuickShelf Demo" src="Resources/demo.gif">
 
-> A lightning-fast macOS menu-bar “shelf” that shows any folder’s contents for instant drag & drop access.
-
 ## Features
 
 - 📁 Instant access to any folder's contents
