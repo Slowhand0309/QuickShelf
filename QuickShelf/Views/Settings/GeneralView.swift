@@ -6,13 +6,23 @@
 //
 
 import SwiftUI
+import KeyboardShortcuts
 
 struct GeneralView: View {
     var body: some View {
-        Form {
-            Text("GeneralView")
+        VStack(alignment: .leading) {
+            Text("Shortcuts")
+                .font(.title)
+                .padding(.bottom, 18)
+            KeyboardShortcuts.Recorder(
+                "Open Window:",
+                name: .openShelfWindow
+            )
+            Spacer()
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
+        .frame(height: 120)
     }
 }
 

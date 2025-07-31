@@ -19,7 +19,7 @@ struct SettingsView: View {
                 Label("About", systemImage: "person.crop.circle")
             }
         }
-        .frame(width: 500, height: .none)
+        .frame(width: 500)
     }
 }
 

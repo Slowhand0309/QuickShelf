@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import HotKey
 import MenuBarExtraAccess
+import KeyboardShortcuts
 
 @main
 struct QuickShelfApp: App {
@@ -16,8 +16,6 @@ struct QuickShelfApp: App {
     @State private var isPresented = false
     @State private var statusItem: NSStatusItem?
 
-    private let hotKey = HotKey(key: .s,
-                                modifiers: [.command, .control])
 
     var body: some Scene {
         MenuBarExtra {
@@ -35,7 +33,7 @@ struct QuickShelfApp: App {
         .menuBarExtraAccess(isPresented: $isPresented) { item in
             statusItem = item
             addRightClickMonitor()
-            hotKey.keyDownHandler = { [] in
+            KeyboardShortcuts.onKeyDown(for: .openShelfWindow) { [] in
                 item.button?.performClick(nil)
             }
         }
