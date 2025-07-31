@@ -6,16 +6,16 @@
 //
 
 import SwiftUI
-import HotKey
 import MenuBarExtraAccess
+import KeyboardShortcuts
 
 @main
 struct QuickShelfApp: App {
+    @Environment(\.openSettings) private var openSettings
+
     @State private var isPresented = false
     @State private var statusItem: NSStatusItem?
 
-    private let hotKey = HotKey(key: .s,
-                                modifiers: [.command, .control])
 
     var body: some Scene {
         MenuBarExtra {
@@ -25,15 +25,20 @@ struct QuickShelfApp: App {
                 .renderingMode(.template)
                 .resizable()
                 .frame(width: 18, height: 18)
+                .onAppear {
+                    AppDelegate.shared.openSettings = openSettings
+                }
         }
         .menuBarExtraStyle(.window)
         .menuBarExtraAccess(isPresented: $isPresented) { item in
             statusItem = item
             addRightClickMonitor()
-            hotKey.keyDownHandler = { [] in
+            KeyboardShortcuts.onKeyDown(for: .openShelfWindow) { [] in
                 item.button?.performClick(nil)
             }
         }
+
+        Settings { SettingsView() }
     }
 
     private func addRightClickMonitor() {
@@ -49,11 +54,26 @@ struct QuickShelfApp: App {
 
     private func popupContextMenu(for item: NSStatusItem) {
         let menu = NSMenu()
-//        menu.addItem(withTitle: "Preferences…", action: nil, keyEquivalent: ",")
-//        menu.addItem(.separator())
+        let settingsItem = NSMenuItem(
+            title: "Preferences…",
+            action: #selector(AppDelegate.openPreferences),
+            keyEquivalent: ","
+        )
+        settingsItem.target = AppDelegate.shared
+        menu.addItem(settingsItem)
+        menu.addItem(.separator())
         menu.addItem(withTitle: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q")
         item.menu = menu
         item.button?.performClick(nil)
         item.menu = nil
+    }
+}
+
+class AppDelegate: NSObject {
+    static let shared = AppDelegate()
+    var openSettings: OpenSettingsAction?
+
+    @objc func openPreferences(_ sender: Any?) {
+        openSettings?()
     }
 }
