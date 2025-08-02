@@ -43,10 +43,9 @@ struct ContentView: View {
                 if let url = try? URL(resolvingBookmarkData: data,
                                             options: [.withSecurityScope],
                                             bookmarkDataIsStale: &stale),
-                   url.startAccessingSecurityScopedResource() {
+                   SecurityScope.shared.beginAccess(for: url) {
                     self.items = load(path: url)
                     self.inputDir = url.relativePath
-                    url.stopAccessingSecurityScopedResource()
                 }
             }
         }
@@ -61,12 +60,14 @@ struct ContentView: View {
         panel.canChooseFiles = false
         panel.begin { result in
             guard result == .OK, let url = panel.url else { return }
-            let bookmark = try? url.bookmarkData(options: .withSecurityScope,
+            if let bookmark = try? url.bookmarkData(options: .withSecurityScope,
                                                 includingResourceValuesForKeys: nil,
-                                                relativeTo: nil)
-            UserDefaults.standard.set(bookmark, forKey: "user_selected_dir")
-            self.items = load(path: url)
-            self.inputDir = url.relativePath
+                                                    relativeTo: nil),
+               SecurityScope.shared.beginAccess(for: url) {
+                UserDefaults.standard.set(bookmark, forKey: "user_selected_dir")
+                self.items = load(path: url)
+                self.inputDir = url.relativePath
+            }
         }
         panel.orderFrontRegardless()
     }

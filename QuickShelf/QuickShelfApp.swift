@@ -62,7 +62,13 @@ struct QuickShelfApp: App {
         settingsItem.target = AppDelegate.shared
         menu.addItem(settingsItem)
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q")
+        let quitItem = NSMenuItem(
+            title: "Quit",
+            action: #selector(AppDelegate.terminate(_:)),
+            keyEquivalent: "q"
+        )
+        quitItem.target = AppDelegate.shared
+        menu.addItem(quitItem)
         item.menu = menu
         item.button?.performClick(nil)
         item.menu = nil
@@ -75,5 +81,10 @@ class AppDelegate: NSObject {
 
     @objc func openPreferences(_ sender: Any?) {
         openSettings?()
+    }
+
+    @objc func terminate(_ sender: Any?) {
+        SecurityScope.shared.endAccess()
+        NSApp.terminate(sender)
     }
 }
