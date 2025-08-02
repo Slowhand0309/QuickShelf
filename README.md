@@ -1,12 +1,10 @@
-<p align="center">
- <img width="155" alt="QuickShelf Logo" src="Resources/logo.png">
-</p>
+<div align="center">
+ <img width="250" alt="QuickShelf Logo" src="Resources/logo.png">
+ <h2>QuickShelf</h2>
+ <p><em>A lightning-fast macOS menu-bar “shelf” that shows any folder’s contents for instant drag & drop access.</em></p>
+</div>
 
-# QuickShelf
-
-A lightning-fast macOS menu-bar “shelf” that shows any folder’s contents for instant drag & drop access.
-
-<img width="400" alt="QuickShelf Demo" src="Resources/demo.gif">
+<img width="100%" alt="QuickShelf Demo" src="Resources/demo.gif">
 
 ## Features
 
