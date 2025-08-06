@@ -36,7 +36,7 @@ struct ContentView: View {
             .scrollContentBackground(.hidden)
             .background(Color.black.opacity(0.3))
         }
-        .padding(.all, 16)
+        .padding(.all, 18)
         .onAppear {
             if let data = UserDefaults.standard.data(forKey: "user_selected_dir") {
                 var stale = false
