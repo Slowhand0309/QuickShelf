@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.openSettings) private var openSettings
+
     @State private var inputDir = ""
     @State private var items: [ShelfItem] = []
 
@@ -35,8 +37,20 @@ struct ContentView: View {
             .frame(height: 300)
             .scrollContentBackground(.hidden)
             .background(Color.black.opacity(0.3))
+            HStack {
+                Spacer()
+                Button {
+                    openSettings()
+                } label: {
+                    Image(systemName: "gear")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                }
+                .buttonStyle(.plain)
+            }
         }
-        .padding(.all, 16)
+        .padding(.all, 18)
         .onAppear {
             if let data = UserDefaults.standard.data(forKey: "user_selected_dir") {
                 var stale = false
