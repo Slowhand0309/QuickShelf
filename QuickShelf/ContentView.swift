@@ -16,6 +16,7 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Folder")
+                .font(.title3)
             HStack {
                 TextField("Please select directory", text: $inputDir)
                     .disabled(true)
@@ -26,6 +27,7 @@ struct ContentView: View {
                 }
             }
             Text("Items")
+                .font(.title3)
             List {
                 ForEach(items.standardSorted(), id: \.url) { item in
                     ShelfItemView(item: item)
