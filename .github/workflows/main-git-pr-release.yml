@@ -1,0 +1,32 @@
+name: main-git-pr-release
+on:
+  push:
+    branches:
+    - develop
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  main-git-pr-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4.4'
+
+      - name: Create a release pull request
+        env:
+          GIT_PR_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_PR_RELEASE_BRANCH_PRODUCTION: main
+          GIT_PR_RELEASE_BRANCH_STAGING: develop
+          GIT_PR_RELEASE_LABELS: merge-main
+          GIT_PR_RELEASE_TITLE: 'Merge develop branch into main branch'
+          GIT_PR_RELEASE_TEMPLATE: .github/.git-pr-release-template
+        run: |
+          gem install --no-document git-pr-release
+          git-pr-release --squashed

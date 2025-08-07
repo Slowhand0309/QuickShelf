@@ -1,0 +1,5 @@
+<%= ENV['GIT_PR_RELEASE_TITLE'] %> - Last update:(<%= Time.now.strftime("%Y-%m-%d") %>)
+## Included Merged PRs
+<% pull_requests.each do |pr| -%>
+<%= pr.to_checklist_item %>
+<% end -%>
