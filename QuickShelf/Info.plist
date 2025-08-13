@@ -4,5 +4,7 @@
 <dict>
 	<key>SUPublicEDKey</key>
 	<string>GcHmGpnmUkMBMXNvjP8Y/YXQI+vgFPQ8+HK20pS8Qlk=</string>
+	<key>SUFeedURL</key>
+	<string>https://pub-5f38224dc1ff432da0f0a37e338ec061.r2.dev/sparkle/appcast.xml</string>
 </dict>
 </plist>
