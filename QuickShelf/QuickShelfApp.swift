@@ -62,6 +62,16 @@ struct QuickShelfApp: App {
         settingsItem.target = AppDelegate.shared
         menu.addItem(settingsItem)
         menu.addItem(.separator())
+
+        let updaterItem = NSMenuItem(
+            title: "Check for Updates…",
+            action: #selector(AppDelegate.checkForUpdates(_:)),
+            keyEquivalent: ""
+        )
+        updaterItem.target = AppDelegate.shared
+        menu.addItem(updaterItem)
+        menu.addItem(.separator())
+
         let quitItem = NSMenuItem(
             title: "Quit",
             action: #selector(AppDelegate.terminate(_:)),
@@ -79,8 +89,14 @@ class AppDelegate: NSObject {
     static let shared = AppDelegate()
     var openSettings: OpenSettingsAction?
 
+    private let updater = AppUpdater()
+
     @objc func openPreferences(_ sender: Any?) {
         openSettings?()
+    }
+
+    @objc func checkForUpdates(_ sender: Any?) {
+        updater.checkForUpdates()
     }
 
     @objc func terminate(_ sender: Any?) {
