@@ -9,13 +9,13 @@ import Sparkle
 
 final class AppUpdater {
     private let notifier = NotificationBridge()
-    private lazy var gentleDelegate = UpdaterDelegate(notifier: notifier)
+    private lazy var delegate = UpdaterDelegate(notifier: notifier)
     private lazy var updaterController = SPUStandardUpdaterController(
-        startingUpdater: true, updaterDelegate: gentleDelegate, userDriverDelegate: gentleDelegate
+        startingUpdater: true, updaterDelegate: delegate, userDriverDelegate: delegate
     )
 
     init() {
-        gentleDelegate.updaterController = updaterController
+        delegate.updaterController = updaterController
         notifier.configure()
     }
 
