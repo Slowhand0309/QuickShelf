@@ -89,14 +89,14 @@ class AppDelegate: NSObject {
     static let shared = AppDelegate()
     var openSettings: OpenSettingsAction?
 
-    private let updater = AppUpdater()
+    private let appUpdater = AppUpdater()
 
     @objc func openPreferences(_ sender: Any?) {
         openSettings?()
     }
 
     @objc func checkForUpdates(_ sender: Any?) {
-        updater.checkForUpdates()
+        appUpdater.checkForUpdates()
     }
 
     @objc func terminate(_ sender: Any?) {
