@@ -12,6 +12,7 @@ struct ContentView: View {
 
     @State private var inputDir = ""
     @State private var items: [ShelfItem] = []
+    @State private var selection = Set<URL>()
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -28,11 +29,12 @@ struct ContentView: View {
             }
             Text("Items")
                 .font(.title3)
-            List {
+            List(selection: $selection) {
                 ForEach(items.standardSorted(), id: \.url) { item in
                     ShelfItemView(item: item)
                         .alignmentGuide(.listRowSeparatorLeading) { _ in  0 }
                         .listRowSeparatorTint(Color.white.opacity(0.3))
+                        .tag(item.url)
                         .draggable(item)
                 }
             }
@@ -54,6 +56,7 @@ struct ContentView: View {
         }
         .padding(.all, 18)
         .onAppear {
+            selection = []
             if let data = UserDefaults.standard.data(forKey: "user_selected_dir") {
                 var stale = false
                 if let url = try? URL(resolvingBookmarkData: data,
