@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import QuickLook
 
 struct ContentView: View {
     @Environment(\.openSettings) private var openSettings
@@ -13,6 +14,7 @@ struct ContentView: View {
     @State private var inputDir = ""
     @State private var items: [ShelfItem] = []
     @State private var selection = Set<URL>()
+    @State private var previewUrl: URL?
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,7 +33,11 @@ struct ContentView: View {
                 .font(.title3)
             List(selection: $selection) {
                 ForEach(items.standardSorted(), id: \.url) { item in
-                    ShelfItemView(item: item)
+                    ShelfItemView(
+                        item: item,
+                        isSelected: selection.contains(item.url),
+                        onPreview: { url in previewUrl = url }
+                    )
                         .alignmentGuide(.listRowSeparatorLeading) { _ in  0 }
                         .listRowSeparatorTint(Color.white.opacity(0.3))
                         .tag(item.url)
@@ -68,6 +74,7 @@ struct ContentView: View {
                 }
             }
         }
+        .quickLookPreview($previewUrl)
     }
 
     private func openPanel() {
