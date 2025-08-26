@@ -36,7 +36,12 @@ struct ContentView: View {
                     ShelfItemView(
                         item: item,
                         isSelected: selection.contains(item.url),
-                        onPreview: { url in previewUrl = url }
+                        onPreview: { url in
+                            if let anchor = NSApp.keyWindow {
+                                SlidePanelPreview.shared.show(url: url, beside: anchor,
+                                                               size: NSSize(width: 380, height: 300))
+                            }
+                        }
                     )
                         .alignmentGuide(.listRowSeparatorLeading) { _ in  0 }
                         .listRowSeparatorTint(Color.white.opacity(0.3))
@@ -74,7 +79,9 @@ struct ContentView: View {
                 }
             }
         }
-        .quickLookPreview($previewUrl)
+        .onDisappear {
+            SlidePanelPreview.shared.hide()
+        }
     }
 
     private func openPanel() {
