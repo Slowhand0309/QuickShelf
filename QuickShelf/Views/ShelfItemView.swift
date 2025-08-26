@@ -11,6 +11,8 @@ struct ShelfItemView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     let item: ShelfItem
+    let isSelected: Bool
+    let onPreview: (URL) -> Void
 
     var body: some View {
         HStack {
@@ -29,21 +31,39 @@ struct ShelfItemView: View {
             }
             Text(item.url.lastPathComponent)
                 .foregroundColor(colorScheme == .dark ? .primary : .white.opacity(0.7))
+            Spacer()
+            if isSelected && !item.isDirectory {
+                Button {
+                    onPreview(item.url)
+                } label: {
+                    Image(systemName: "eye")
+                }
+                .help("Preview")
+                .buttonStyle(.borderless)
+                .keyboardShortcut(.space, modifiers: [])
+            }
         }
         .padding(.all, 8)
     }
 }
 
 #Preview("file") {
-    ShelfItemView(item: ShelfItem(
-        url: URL(filePath: "/path/to/fileName.txt")!,
-        isDirectory: false
-    ))
+    ShelfItemView(
+        item: ShelfItem(
+            url: URL(filePath: "/path/to/fileName.txt")!,
+            isDirectory: false
+        ),
+        isSelected: false,
+        onPreview: { url in print("Previewing: \(url)")}
+    )
 }
 
 #Preview("directory") {
-    ShelfItemView(item: ShelfItem(
-        url: URL(filePath: "/path/to/folderName")!,
-        isDirectory: true
-    ))
+    ShelfItemView(
+        item: ShelfItem(
+            url: URL(filePath: "/path/to/folderName")!,
+            isDirectory: true
+        ),
+        isSelected: false,
+        onPreview: { url in print("Previewing: \(url)")})
 }
