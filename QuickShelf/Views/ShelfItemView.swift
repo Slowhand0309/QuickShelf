@@ -31,7 +31,7 @@ struct ShelfItemView: View {
             }
             Text(item.url.lastPathComponent)
                 .foregroundColor(colorScheme == .dark ? .primary : .white.opacity(0.7))
-
+            Spacer()
             if isSelected && !item.isDirectory {
                 Button {
                     onPreview(item.url)
