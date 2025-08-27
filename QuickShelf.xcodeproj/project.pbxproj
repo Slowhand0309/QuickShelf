@@ -10,6 +10,7 @@
 		6B31AE332E43FF0600C4653D /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 6B31AE322E43FF0600C4653D /* LaunchAtLogin */; };
 		6B3437242E3B6B4F00C52D3C /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 6B3437232E3B6B4F00C52D3C /* KeyboardShortcuts */; };
 		6B400A802E174A6E00505989 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 6B400A7F2E174A6E00505989 /* MenuBarExtraAccess */; };
+		6B5A8B6B2E4D281A00E1293D /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 6B5A8B6A2E4D281A00E1293D /* Sparkle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,9 +36,22 @@
 		6B400A6B2E1749FC00505989 /* QuickShelfUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickShelfUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6B5A8BDC2E4D357900E1293D /* Exceptions for "QuickShelf" folder in "QuickShelf" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6B400A522E1749FB00505989 /* QuickShelf */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6B400A552E1749FB00505989 /* QuickShelf */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6B5A8BDC2E4D357900E1293D /* Exceptions for "QuickShelf" folder in "QuickShelf" target */,
+			);
 			path = QuickShelf;
 			sourceTree = "<group>";
 		};
@@ -59,6 +73,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B31AE332E43FF0600C4653D /* LaunchAtLogin in Frameworks */,
+				6B5A8B6B2E4D281A00E1293D /* Sparkle in Frameworks */,
 				6B400A802E174A6E00505989 /* MenuBarExtraAccess in Frameworks */,
 				6B3437242E3B6B4F00C52D3C /* KeyboardShortcuts in Frameworks */,
 			);
@@ -124,6 +139,7 @@
 				6B400A7F2E174A6E00505989 /* MenuBarExtraAccess */,
 				6B3437232E3B6B4F00C52D3C /* KeyboardShortcuts */,
 				6B31AE322E43FF0600C4653D /* LaunchAtLogin */,
+				6B5A8B6A2E4D281A00E1293D /* Sparkle */,
 			);
 			productName = QuickShelf;
 			productReference = 6B400A532E1749FB00505989 /* QuickShelf.app */;
@@ -211,6 +227,7 @@
 				6B400A7E2E174A6E00505989 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */,
 				6B3437222E3B6B4F00C52D3C /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				6B31AE312E43FF0600C4653D /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
+				6B5A8B692E4D281A00E1293D /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6B400A542E1749FB00505989 /* Products */;
@@ -412,10 +429,11 @@
 				CODE_SIGN_ENTITLEMENTS = QuickShelf/QuickShelf.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QuickShelf/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -423,7 +441,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 0.0.9;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.slowlab.QuickShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -441,10 +459,11 @@
 				CODE_SIGN_ENTITLEMENTS = QuickShelf/QuickShelf.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QuickShelf/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -452,7 +471,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 0.0.9;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.slowlab.QuickShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -592,6 +611,14 @@
 				minimumVersion = 1.2.1;
 			};
 		};
+		6B5A8B692E4D281A00E1293D /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -609,6 +636,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6B400A7E2E174A6E00505989 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */;
 			productName = MenuBarExtraAccess;
+		};
+		6B5A8B6A2E4D281A00E1293D /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6B5A8B692E4D281A00E1293D /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
