@@ -10,6 +10,10 @@ import QuickLook
 
 struct ContentView: View {
     @Environment(\.openSettings) private var openSettings
+    @AppStorage("preview.side")
+    private var sideRaw: String = PreviewSide.right.rawValue
+
+    private var side: PreviewSide { PreviewSide(rawValue: sideRaw) ?? .right }
 
     @State private var inputDir = ""
     @State private var items: [ShelfItem] = []
@@ -38,7 +42,7 @@ struct ContentView: View {
                         isSelected: selection.contains(item.url),
                         onPreview: { url in
                             if let anchor = NSApp.keyWindow {
-                                SlidePanelPreview.shared.show(url: url, beside: anchor,
+                                SlidePanelPreview.shared.show(url: url, beside: anchor, side: side,
                                                                size: NSSize(width: 380, height: 300))
                             }
                         }

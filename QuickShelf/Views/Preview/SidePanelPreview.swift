@@ -17,14 +17,19 @@ final class SlidePanelPreview: NSObject {
     private weak var anchorWindow: NSWindow?
     private var closeEvent: Any?
 
-    func show(url: URL, beside anchor: NSWindow, size: NSSize = NSSize(width: 360, height: 300)) {
+    func show(
+        url: URL,
+        beside anchor: NSWindow,
+        side: PreviewSide,
+        size: NSSize = NSSize(width: 360, height: 300)
+    ) {
         anchorWindow = anchor
         let panel = self.panel == nil ? makePanel(size: size) : self.panel!
         if self.panel == nil { self.panel = panel }
 
         ensurePreviewViewAlive()
         previewView?.previewItem = url as NSURL
-        positionPanelBesideAnchor(panel: panel, anchor: anchor, size: size)
+        positionPanelBesideAnchor(panel: panel, anchor: anchor, side: side, size: size)
 
         // nonactivating
         panel.orderFrontRegardless()
@@ -73,15 +78,14 @@ final class SlidePanelPreview: NSObject {
         }
     }
 
-    private func positionPanelBesideAnchor(panel: NSPanel, anchor: NSWindow, size: NSSize) {
+    private func positionPanelBesideAnchor(panel: NSPanel, anchor: NSWindow, side: PreviewSide, size: NSSize) {
         let anchorFrame = anchor.frame
         let screen = anchor.screen ?? NSScreen.main
         let visibleFrame = screen?.visibleFrame ?? .infinite
 
         var origin = NSPoint(x: anchorFrame.maxX + 8,
                              y: anchorFrame.minY)
-        // TODO: Make it switchable in the settings
-        if true {
+        if side == .left {
             var x = anchorFrame.minX - 8 - size.width
             var y = anchorFrame.minY
 
