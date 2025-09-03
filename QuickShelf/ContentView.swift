@@ -5,6 +5,7 @@
 //  Created by slowhand on 2025/07/04.
 //
 
+import AppKit
 import SwiftUI
 import QuickLook
 
@@ -19,6 +20,10 @@ struct ContentView: View {
     @State private var items: [ShelfItem] = []
     @State private var selection = Set<URL>()
     @State private var previewUrl: URL?
+
+    @State private var editingUrl: URL?
+    @State private var renameText: String = ""
+    @State private var errorMessage: String?
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -37,20 +42,38 @@ struct ContentView: View {
                 .font(.title3)
             List(selection: $selection) {
                 ForEach(items.standardSorted(), id: \.url) { item in
-                    ShelfItemView(
-                        item: item,
-                        isSelected: selection.contains(item.url),
-                        onPreview: { url in
-                            if let anchor = NSApp.keyWindow {
-                                SlidePanelPreview.shared.show(url: url, beside: anchor, side: side,
-                                                               size: NSSize(width: 380, height: 300))
+                    if editingUrl == item.url {
+                        ShelfItemEditView(
+                            item: item,
+                            text: $renameText,
+                            onCommit: { commitRename() },
+                            onCancel: { cancelRename() }
+                        )
+                        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
+                        .listRowSeparatorTint(Color.white.opacity(0.3))
+                        .tag(item.url)
+                    } else {
+                        ShelfItemView(
+                            item: item,
+                            isSelected: selection.contains(item.url),
+                            onPreview: { url in
+                                if let anchor = NSApp.keyWindow {
+                                    SlidePanelPreview.shared.show(
+                                        url: url, beside: anchor, side: side,
+                                        size: NSSize(width: 380, height: 300)
+                                    )
+                                }
                             }
-                        }
-                    )
-                        .alignmentGuide(.listRowSeparatorLeading) { _ in  0 }
+                        )
+                        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
                         .listRowSeparatorTint(Color.white.opacity(0.3))
                         .tag(item.url)
                         .draggable(item)
+                        .contextMenu {
+                            Button("Rename…") { startInlineRename() }
+                                .disabled(selection.count != 1)
+                        }
+                    }
                 }
             }
             .frame(height: 300)
@@ -83,8 +106,60 @@ struct ContentView: View {
                 }
             }
         }
-        .onDisappear {
-            SlidePanelPreview.shared.hide()
+        .onDisappear { SlidePanelPreview.shared.hide() }
+
+        // Press Enter to begin editing (only when one item is selected and not currently being edited)
+        .overlay(
+            Button(action: startInlineRename) { EmptyView() }
+                .keyboardShortcut(.return, modifiers: [])
+                .disabled(!(selection.count == 1 && editingUrl == nil))
+                .frame(width: 0, height: 0)
+                .opacity(0)
+        )
+        .overlay(alignment: .bottom) {
+            if let msg = errorMessage {
+                ErrorBannerView(message: msg) {
+                    withAnimation { errorMessage = nil }
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(10)
+                .padding(.bottom, 8)
+            }
+        }
+    }
+
+    private func startInlineRename() {
+        guard selection.count == 1, let url = selection.first else { return }
+        editingUrl = url
+        renameText = url.lastPathComponent
+    }
+
+    private func cancelRename() {
+        editingUrl = nil
+        renameText = ""
+    }
+
+    private func commitRename() {
+        guard let src = editingUrl else { return }
+        let newName = renameText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !newName.isEmpty else { cancelRename(); return }
+
+        let dir = src.deletingLastPathComponent()
+        let dest = dir.appendingPathComponent(newName)
+
+        if FileManager.default.fileExists(atPath: dest.path) {
+            NSSound.beep()
+            withAnimation { errorMessage = "A file named “\(newName)” already exists." }
+            return
+        }
+        do {
+            try FileManager.default.moveItem(at: src, to: dest)
+            self.items = load(path: dir)
+            self.selection = [dest]
+            cancelRename()
+        } catch {
+            NSSound.beep()
+            withAnimation { errorMessage = error.localizedDescription }
         }
     }
 
