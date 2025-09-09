@@ -148,8 +148,7 @@ struct ContentView: View {
         let dest = dir.appendingPathComponent(newName)
 
         if FileManager.default.fileExists(atPath: dest.path) {
-            NSSound.beep()
-            withAnimation { errorMessage = "A file named “\(newName)” already exists." }
+            cancelRename();
             return
         }
         do {
