@@ -56,6 +56,7 @@ struct ContentView: View {
                         ShelfItemView(
                             item: item,
                             isSelected: selection.contains(item.url),
+                            isMultiSelected: selection.count != 1,
                             onPreview: { url in
                                 if let anchor = NSApp.keyWindow {
                                     SlidePanelPreview.shared.show(
@@ -63,16 +64,13 @@ struct ContentView: View {
                                         size: NSSize(width: 380, height: 300)
                                     )
                                 }
-                            }
+                            },
+                            onEdit: { startInlineRename() }
                         )
                         .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
                         .listRowSeparatorTint(Color.white.opacity(0.3))
                         .tag(item.url)
                         .draggable(item)
-                        .contextMenu {
-                            Button("Rename…") { startInlineRename() }
-                                .disabled(selection.count != 1)
-                        }
                     }
                 }
             }
@@ -107,15 +105,6 @@ struct ContentView: View {
             }
         }
         .onDisappear { SlidePanelPreview.shared.hide() }
-
-        // Press Enter to begin editing (only when one item is selected and not currently being edited)
-        .overlay(
-            Button(action: startInlineRename) { EmptyView() }
-                .keyboardShortcut(.return, modifiers: [])
-                .disabled(!(selection.count == 1 && editingUrl == nil))
-                .frame(width: 0, height: 0)
-                .opacity(0)
-        )
         .overlay(alignment: .bottom) {
             if let msg = errorMessage {
                 ErrorBannerView(message: msg) {
