@@ -12,7 +12,9 @@ struct ShelfItemView: View {
 
     let item: ShelfItem
     let isSelected: Bool
+    let isMultiSelected: Bool
     let onPreview: (URL) -> Void
+    let onEdit: () -> Void
 
     var body: some View {
         HStack {
@@ -32,15 +34,24 @@ struct ShelfItemView: View {
             Text(item.url.lastPathComponent)
                 .foregroundColor(colorScheme == .dark ? .primary : .white.opacity(0.7))
             Spacer()
-            if isSelected && !item.isDirectory {
+            if isSelected && !isMultiSelected {
                 Button {
                     onPreview(item.url)
                 } label: {
                     Image(systemName: "eye")
                 }
-                .help("Preview")
-                .buttonStyle(.borderless)
-                .keyboardShortcut(.space, modifiers: [])
+                    .help("Preview")
+                    .buttonStyle(.borderless)
+                    .keyboardShortcut(.space, modifiers: [])
+                    .opacity(!item.isDirectory ? 1 : 0)
+                Button {
+                    onEdit()
+                } label: {
+                    Image(systemName: "pencil")
+                }
+                    .help("Rename")
+                    .buttonStyle(.borderless)
+                    .keyboardShortcut(.return, modifiers: [])
             }
         }
         .padding(.all, 8)
@@ -54,7 +65,9 @@ struct ShelfItemView: View {
             isDirectory: false
         ),
         isSelected: false,
-        onPreview: { url in print("Previewing: \(url)")}
+        isMultiSelected: false,
+        onPreview: { url in print("Previewing: \(url)")},
+        onEdit: {}
     )
 }
 
@@ -65,5 +78,8 @@ struct ShelfItemView: View {
             isDirectory: true
         ),
         isSelected: false,
-        onPreview: { url in print("Previewing: \(url)")})
+        isMultiSelected: false,
+        onPreview: { url in print("Previewing: \(url)")},
+        onEdit: {}
+    )
 }
