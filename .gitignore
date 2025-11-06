@@ -123,3 +123,6 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+QuickShelf.notarize.zip
+QuickShelf.zip
